@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center animate-fade-in mb-5">
+    <div class="col-lg-8">
+        <div class="glass-card p-4 p-md-5 border-0">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold text-dark display-6">
+                    <i class="fa-solid fa-pen-fancy text-primary me-2"></i> 撰寫心得
+                </h2>
+                <p class="text-muted">將書裡的黃金屋給記錄下來，並與其他人分享</p>
+            </div>
+            
+            <form action="{{ url_for('book_routes.create') }}" method="POST">
+                
+                <div class="mb-4">
+                    <label for="title" class="form-label fw-bold text-dark fs-5">書名 <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control form-control-lg bg-light bg-opacity-75" id="title" name="title" value="{{ title if title else '' }}" required placeholder="例如：原子習慣：細微改變帶來巨大成就...">
+                </div>
+                
+                <div class="mb-4">
+                    <label for="review" class="form-label fw-bold text-dark fs-5">心得與筆記內容 <span class="text-danger">*</span></label>
+                    <textarea class="form-control bg-light bg-opacity-75" id="review" name="review" rows="10" required placeholder="分享你讀完這本書的啟發或是摘錄的佳句...">{{ review if review else '' }}</textarea>
+                </div>
+                
+                <div class="mb-5">
+                    <label for="rating" class="form-label fw-bold text-dark fs-5 mb-3">你給這本書幾顆星？ <span class="text-danger">*</span></label>
+                    <div class="d-flex align-items-center bg-light bg-opacity-50 p-4 rounded-4 border">
+                        <input type="range" class="form-range flex-grow-1 me-4" id="rating" name="rating" min="1" max="5" step="1" value="{{ rating if rating else 5 }}" oninput="document.getElementById('ratingValue').innerText = this.value">
+                        <div class="badge text-dark fs-3 px-4 py-2 rounded-pill shadow-sm" style="background: linear-gradient(135deg, #ffd700 0%, #ffaa00 100%);">
+                            <span id="ratingValue">{{ rating if rating else 5 }}</span> <i class="fa-solid fa-star text-white"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="d-grid gap-3 d-md-flex justify-content-md-end mt-5 pt-4 border-top">
+                    <a href="{{ url_for('book_routes.index') }}" class="btn btn-light rounded-pill px-5 text-muted fw-bold shadow-sm py-2">取消</a>
+                    <button type="submit" class="btn btn-custom px-5 py-2 fs-5"><i class="fa-solid fa-paper-plane me-2"></i> 發佈文章</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

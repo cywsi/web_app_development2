@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row animate-fade-in mb-3">
+    <div class="col-lg-9 mx-auto">
+        <a href="{{ url_for('book_routes.index') }}" class="btn btn-sm btn-light rounded-pill text-muted shadow-sm fw-bold mb-4 px-3">
+            <i class="fa-solid fa-arrow-left me-2"></i> 回到書單
+        </a>
+    </div>
+</div>
+
+<div class="row animate-fade-in">
+    <!-- 主內容區 -->
+    <div class="col-lg-9 mx-auto">
+        <div class="glass-card p-4 p-md-5 mb-5 border-0 position-relative overflow-hidden">
+            <!-- 裝飾背景色塊 -->
+            <div class="position-absolute top-0 end-0 opacity-10" style="width: 300px; height: 300px; background: var(--primary-color); border-radius: 50%; transform: translate(30%, -30%); filter: blur(50px); pointer-events: none;"></div>
+            
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-start mb-4 gap-3 position-relative z-1">
+                <h1 class="fw-bold display-4 text-dark mb-0 lh-base">{{ book.title }}</h1>
+                <div class="badge text-dark fs-3 px-4 py-2 mt-2 mt-md-0 rounded-pill shadow-sm text-nowrap" style="background: linear-gradient(135deg, #ffd700 0%, #ffaa00 100%);">
+                    <span class="me-1">{{ book.rating }}.0</span> <i class="fa-solid fa-star text-white"></i>
+                </div>
+            </div>
+            
+            <p class="text-muted mb-5 pb-3 border-bottom border-secondary border-opacity-10 position-relative z-1 fs-6">
+                <i class="fa-solid fa-calendar-days me-2"></i> 撰寫時間： {{ book.created_at[:16] }}
+            </p>
+            
+            <div class="fs-5 lh-lg text-dark mb-3 position-relative z-1" style="white-space: pre-line;">
+                {{ book.review }}
+            </div>
+        </div>
+
+        <!-- 留言區塊 -->
+        <div class="d-flex align-items-center mb-4">
+            <h3 class="fw-bold mb-0 text-dark">
+                <i class="fa-regular fa-comments me-2" style="color: var(--secondary-color);"></i>讀者迴響
+            </h3>
+            <span class="badge bg-secondary rounded-pill ms-3 fs-6">{{ comments|length }}</span>
+        </div>
+        
+        <div class="glass-card p-4 p-md-5 border-0 mb-5">
+            <!-- 歷史留言清單 -->
+            {% if comments %}
+                <div class="list-group list-group-flush mb-5">
+                    {% for comment in comments %}
+                        <div class="list-group-item bg-transparent border-bottom border-light border-opacity-75 py-4 px-2">
+                            <div class="d-flex w-100 justify-content-between align-items-center mb-3">
+                                <h5 class="mb-0 fw-bold text-dark d-flex align-items-center">
+                                    <div class="rounded-circle text-white d-flex justify-content-center align-items-center fw-bold shadow-sm me-3" style="width: 40px; height: 40px; background: var(--secondary-color);">
+                                        {{ 'User'[:1] }}
+                                    </div>
+                                    匿名讀者
+                                </h5>
+                                <small class="text-muted fw-bold"><i class="fa-regular fa-clock me-1"></i> {{ comment.created_at[:16] }}</small>
+                            </div>
+                            <p class="mb-0 text-dark fs-5 lh-base ps-5 ms-2">{{ comment.content }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="text-center py-5 text-muted opacity-50 mb-5 border-bottom border-secondary border-opacity-10">
+                    <i class="fa-regular fa-comment-dots fa-4x mb-3 text-secondary"></i>
+                    <h4 class="mb-0 fw-bold">還沒有人留言</h4>
+                    <p>覺得這本書有趣嗎？分享一下你的看法吧！</p>
+                </div>
+            {% endif %}
+
+            <!-- 新增留言表單 -->
+            <form action="{{ url_for('book_routes.add_comment', id=book.id) }}" method="POST" class="bg-light bg-opacity-75 p-4 rounded-4 shadow-sm border border-white">
+                <h5 class="fw-bold mb-4 text-dark"><i class="fa-solid fa-reply me-2" style="color: var(--primary-color);"></i>我也要回應</h5>
+                <div class="mb-3">
+                    <textarea class="form-control border-0 shadow-sm rounded-3 fs-5 p-3" name="content" rows="4" placeholder="在這裡寫下你的心得或看法..." required></textarea>
+                </div>
+                <div class="text-end mt-4">
+                    <button type="submit" class="btn btn-custom rounded-pill px-5 fw-bold shadow">
+                        送出留言 <i class="fa-solid fa-paper-plane ms-1"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
